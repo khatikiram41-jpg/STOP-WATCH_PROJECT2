@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Interactive Stopwatch | SkillCraft</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        /* Navigation Bar */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #1f2937;
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 9px 15px;
+            border-radius: 6px;
+            transition: 0.3s ease;
+        }
+
+        /* Menu Hover Effect */
+        nav ul li a:hover {
+            background: #38bdf8;
+            color: #111827;
+            transform: translateY(-2px);
+        }
+
+        /* Home Section */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .container h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .container > p {
+            color: #64748b;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        /* Stopwatch */
+        .stopwatch {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        #display {
+            font-size: 55px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            opacity: 0.88;
+        }
+
+        .start {
+            background: #16a34a;
+        }
+
+        .stop {
+            background: #dc2626;
+        }
+
+        .lap {
+            background: #9333ea;
+        }
+
+        .reset {
+            background: #2563eb;
+        }
+
+        /* Lap Section */
+        .lap-container {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .lap-container h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        #lapList {
+            list-style: none;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 0 5px;
+        }
+
+        #lapList li {
+            background: #f1f5f9;
+            margin: 7px 0;
+            padding: 10px 15px;
+            border-radius: 7px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Contact Section */
+        #contact {
+            padding: 70px 20px;
+            text-align: center;
+            background: #1f2937;
+            color: white;
+        }
+
+        #contact h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .contact-box {
+            max-width: 500px;
+            margin: auto;
+            padding: 25px;
+            background: #374151;
+            border-radius: 12px;
+        }
+
+        .contact-box p {
+            margin: 12px 0;
+            font-size: 17px;
+        }
+
+        /* Footer */
+        footer {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 18px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 650px) {
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                gap: 3px;
+            }
+
+            nav ul li a {
+                font-size: 14px;
+                padding: 7px 9px;
+            }
+
+            .container h1 {
+                font-size: 32px;
+            }
+
+            #display {
+                font-size: 38px;
+            }
+
+            .stopwatch {
+                padding: 25px 15px;
+            }
+
+            button {
+                padding: 10px 17px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header>
+
+        <div class="logo">
+            Stop<span>Watch</span>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#stopwatch">Stopwatch</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+    </header>
+
+
+    <!-- Home Section -->
+    <section id="home">
+
+        <div class="container">
+
+            <h1>⏱️ Interactive Stopwatch</h1>
+
+            <p>
+                Accurately measure and record time intervals
+                using our simple and user-friendly stopwatch.
+            </p>
+
+
+            <!-- Stopwatch -->
+            <div class="stopwatch" id="stopwatch">
+
+                <div id="display">00:00:00.00</div>
+
+                <div class="buttons">
+
+                    <button class="start" onclick="startStopwatch()">
+                        ▶ Start
+                    </button>
+
+                    <button class="stop" onclick="stopStopwatch()">
+                        ⏸ Stop
+                    </button>
+
+                    <button class="lap" onclick="recordLap()">
+                        🏁 Lap
+                    </button>
+
+                    <button class="reset" onclick="resetStopwatch()">
+                        🔄 Reset
+                    </button>
+
+                </div>
+
+
+                <!-- Lap Times -->
+                <div class="lap-container">
+
+                    <h2>Lap Times</h2>
+
+                    <ul id="lapList"></ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Contact Section -->
+    <section id="contact">
+
+        <h2>Contact Us</h2>
+
+        <div class="contact-box">
+
+            <p>📧 Email: stopwatch@example.com</p>
+
+            <p>📞 Phone: +91 98765 43210</p>
+
+            <p>📍 Location: India</p>
+
+            <p>
+                For questions, feedback, or suggestions,
+                feel free to contact us.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 Interactive Stopwatch | SkillCraft Technology
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        // Stopwatch Variables
+        let startTime = 0;
+        let elapsedTime = 0;
+        let timerInterval = null;
+        let lapStartTime = 0;
+        let lapNumber = 0;
+
+
+        const display = document.getElementById("display");
+        const lapList = document.getElementById("lapList");
+
+
+        // Start Stopwatch
+        function startStopwatch() {
+
+            if (timerInterval !== null) {
+                return;
+            }
+
+            startTime = Date.now() - elapsedTime;
+            lapStartTime = Date.now() - elapsedTime;
+
+            timerInterval = setInterval(function () {
+
+                elapsedTime = Date.now() - startTime;
+
+                displayTime(elapsedTime);
+
+            }, 10);
+        }
+
+
+        // Stop Stopwatch
+        function stopStopwatch() {
+
+            if (timerInterval !== null) {
+
+                clearInterval(timerInterval);
+                timerInterval = null;
+
+            }
+        }
+
+
+        // Reset Stopwatch
+        function resetStopwatch() {
+
+            clearInterval(timerInterval);
+
+            timerInterval = null;
+            startTime = 0;
+            elapsedTime = 0;
+            lapStartTime = 0;
+            lapNumber = 0;
+
+            display.textContent = "00:00:00.00";
+
+            lapList.innerHTML = "";
+        }
+
+
+        // Record Lap Time
+        function recordLap() {
+
+            // Lap only works when stopwatch is running
+            if (timerInterval === null) {
+                return;
+            }
+
+            const currentTime = Date.now();
+
+            const lapTime = currentTime - lapStartTime;
+
+            lapStartTime = currentTime;
+
+            lapNumber++;
+
+            const li = document.createElement("li");
+
+            li.innerHTML = `
+                <span>Lap ${lapNumber}</span>
+                <strong>${formatTime(lapTime)}</strong>
+            `;
+
+            // Add newest lap at the top
+            lapList.prepend(li);
+        }
+
+
+        // Display Main Stopwatch Time
+        function displayTime(time) {
+
+            display.textContent = formatTime(time);
+        }
+
+
+        // Format Time
+        function formatTime(time) {
+
+            let milliseconds = Math.floor((time % 1000) / 10);
+
+            let seconds = Math.floor((time / 1000) % 60);
+
+            let minutes = Math.floor((time / (1000 * 60)) % 60);
+
+            let hours = Math.floor(time / (1000 * 60 * 60));
+
+
+            milliseconds = milliseconds.toString().padStart(2, "0");
+
+            seconds = seconds.toString().padStart(2, "0");
+
+            minutes = minutes.toString().padStart(2, "0");
+
+            hours = hours.toString().padStart(2, "0");
+
+
+            return `${hours}:${minutes}:${seconds}.${milliseconds}`;
+        }
+
+    </script>
+
+</body>
+</html>
